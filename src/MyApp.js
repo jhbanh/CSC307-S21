@@ -9,22 +9,19 @@ function MyApp() {
   function removeOneCharacter (index) {
     var charID = characters[index].id
     deleteCall(charID).then( result => {
-      if (result)
-        removeOneCharacterHelper(index)
+      if (result){
+        const updated = characters.filter((character, i) => {
+          return i !== index
+        });
+        setCharacters(updated);
+      }
     });
-  }
-
-  function removeOneCharacterHelper(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index
-    });
-    setCharacters(updated);
   }
 
   function updateList(person) { 
     makePostCall(person).then( result => {
     if (result)
-       setCharacters([...characters, person] );
+       setCharacters([...characters, result] );
     });
  }
 
@@ -42,7 +39,7 @@ function MyApp() {
   async function makePostCall(person){
     try {
        const response = await axios.post('http://localhost:5000/users', person);
-       return response;
+       return response.data;
     }
     catch (error) {
        console.log(error);
