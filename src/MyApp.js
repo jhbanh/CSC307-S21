@@ -9,7 +9,7 @@ function MyApp() {
   function removeOneCharacter (index) {
     var charID = characters[index].id
     deleteCall(charID).then( result => {
-      if (result){
+      if (result.status === 204){
         const updated = characters.filter((character, i) => {
           return i !== index
         });
@@ -39,7 +39,14 @@ function MyApp() {
   async function makePostCall(person){
     try {
        const response = await axios.post('http://localhost:5000/users', person);
-       return response.data;
+       if (response.status === 201){
+        return response.data;
+       }
+       else{
+         console.log('Not a 201...')
+         return false
+       }
+      
     }
     catch (error) {
        console.log(error);
